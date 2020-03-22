@@ -1,6 +1,6 @@
-# Goodhan
+# goodhangul
 
-All things Hancom made good (in my opinion).
+All things Hangul made good (in my opinion).
 
 ## Hwp file converter
 
