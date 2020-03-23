@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/kcalvinalvin/Goodhan/util"
+	"github.com/kcalvinalvin/goodhangul/util"
 )
 
 // Signature is the first 32 bytes that the hwp50 file format is going
@@ -350,18 +350,18 @@ type FileVersion struct {
 	// First Byte: Biggest file structure change.
 	// Incompatible if this byte is different
 	// 첫 번째 바이트: 가장 큰 구조 바뀜을 뜻합니다. 다르면 호환 불가.
-	MM uint8
+	Major uint8
 	// Second Byte: Lesser file structure change.
 	// Incompatible if this byte is different
 	// 두 번째 바이트: 두 번째로 큰 구조 바뀜을 뜻합니다. 다르면 호환 불가
-	NN uint8
+	Minor uint8
 	// Third Byte: Additional features added but backwards compatible.
 	// 셋째 바이트: 추가 기능이 더해짐을 뜻합니다. 달라도 호환 가능.
-	PP uint8
+	Micro uint8
 	// Fourth Byte: Addtiional info in Record. Backwards compatible.
 	// 네 번째 바이트: 추가 정보가 Record에 더해짐을 뜻합니다. 달라도
 	// 호환 가능.
-	RR uint8
+	Extra uint8
 }
 
 // DeserializeVersion deserializes version info from the given 4 bytes
@@ -369,9 +369,9 @@ type FileVersion struct {
 // DeserializeVersion은 4 바이트 array의 버전 정보를 deserialize 합니다.
 // Argument b는 little endian 포맷으로 주어야 합니다.
 func (fv *FileVersion) DeserializeVersion(b [4]byte) error {
-	fv.MM = uint8(b[2])
-	fv.NN = uint8(b[3])
-	fv.PP = uint8(b[0])
-	fv.RR = uint8(b[1])
+	fv.Major = uint8(b[2])
+	fv.Minor = uint8(b[3])
+	fv.Micro = uint8(b[0])
+	fv.Extra = uint8(b[1])
 	return nil
 }

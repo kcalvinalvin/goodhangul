@@ -10,7 +10,7 @@ import (
 // reads it.
 // TestDeserializeFileHeader는 .hwp 파일 헤더를 파일에서 찾아서 읽습니다.
 func TestDeserializeFileHeader(t *testing.T) {
-	f, err := os.Open("test.hwp")
+	f, err := os.Open("testdata")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,8 +52,8 @@ func TestDeserializeFileHeader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println("FileVersion", h.Version.MM, h.Version.NN,
-		h.Version.PP, h.Version.RR)
+	fmt.Println("FileVersion", h.Version.Major, h.Version.Minor,
+		h.Version.Micro, h.Version.Extra)
 
 	fmt.Println("")
 	fmt.Println("IsCompressed?:", h.Fp.IsCompressed())
