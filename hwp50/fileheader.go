@@ -87,6 +87,45 @@ type FileHeader struct {
 	//################################################
 }
 
+// GrabFileHeader grabs the FileHeader from the given hwp file
+// Needed as the OLE parser seems to just skip over the FileHeader
+// TODO maybe this can be fixed
+func (fh *FileHeader) GrabFileHeader(f io.ReadSeeker) error {
+	var compare [32]byte
+	var offset int
+
+	// Bit of a hack. Seeks for the hwp header as .hwp file uses the OLE
+	// file structure. Records the offset
+	for {
+		// read 32 bytes to the compare var
+		// 파일에서 32바이트씩 읽기
+		// i returns how many bytes read
+		// i는 얼마나 읽혔는지를 나타냅니다
+		i, err := f.Read(compare[:])
+		if err != nil {
+			return err
+		}
+		// If Signature found, then break
+		// Signature 찾으면 break
+		if compare == Signature {
+			break
+		}
+		// add onto the offset last
+		// 마지막으로 offset에 값 추가하기
+		offset += i
+	}
+
+	// Seek back to the start of the hwp file header
+	// hwp Signature를 찾은 곳으로 seek
+	f.Seek(int64(offset), 0)
+
+	err := fh.DeserializeFileHeader(f)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // DeserializeFileHeader reads the file header information from the hwp50 file
 // NOTE: All variables are in little endian
 //

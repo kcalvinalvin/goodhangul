@@ -1,11 +1,12 @@
 package hwp50
 
+import "fmt"
+
 // DocInfo saves information about font, tab, styling, etc
 //
 // DocInfo는 본문의 글꼴, 글자 속성, 탭, 스타일등의 정보를 담고 있습니다.
 type DocInfo struct {
 	// DocumentProperites is the current hwp file's properties
-	//
 	// DocumentProperites는 현 hwp 파일의 속성을 나타냅니다.
 	DocumentProperites DocumentProperites
 
@@ -323,20 +324,25 @@ func (fn *FaceName) GetDefaultFNameLen() uint16 {
 }
 
 type BorderFill struct {
+	// Implements "Chart 24" in the hwp50 specs
 	Property uint16
 
-	BorderType [4]uint8
+	// Implements "Chart 25" in the hwp50 specs
+	BorderType uint32
 
-	BorderThickness [4]uint8
+	// Implements "Chart 26" in the hwp50 specs
+	BorderThickness uint32
 
 	BorderColor [4]uint32
 
+	// Implements "Chart 27" in the hwp50 specs
 	DiagonalLineType uint8
 
 	DiagonalLineThickness uint8
 
 	DiagonalLineColor uint32
 
+	// Implements "Chart 28" in the hwp50 specs
 	FillInfo []byte
 }
 
@@ -397,4 +403,91 @@ func (bf *BorderFill) HasCenterLine() bool {
 	mask := uint16(1 << 13)
 	value := mask & bf.Property
 	return value == 1
+}
+
+// TODO chart 25
+func (bf *BorderFill) GetLineType() {
+}
+
+// GetBorderThickness returns the thickness of the border in
+// milimeters.
+func (bf *BorderFill) GetBorderThickness() (float32, error) {
+	if bf.BorderThickness == 0 {
+		return 0.1, nil
+	}
+	if bf.BorderThickness == 1 {
+		return 0.12, nil
+	}
+	if bf.BorderThickness == 2 {
+		return 0.15, nil
+	}
+	if bf.BorderThickness == 3 {
+		return 0.2, nil
+	}
+	if bf.BorderThickness == 4 {
+		return 0.25, nil
+	}
+	if bf.BorderThickness == 5 {
+		return 0.3, nil
+	}
+	if bf.BorderThickness == 6 {
+		return 0.4, nil
+	}
+	if bf.BorderThickness == 7 {
+		return 0.5, nil
+	}
+	if bf.BorderThickness == 8 {
+		return 0.6, nil
+	}
+	if bf.BorderThickness == 9 {
+		return 0.7, nil
+	}
+	if bf.BorderThickness == 10 {
+		return 1.0, nil
+	}
+	if bf.BorderThickness == 11 {
+		return 1.5, nil
+	}
+	if bf.BorderThickness == 12 {
+		return 2.0, nil
+	}
+	if bf.BorderThickness == 13 {
+		return 3.0, nil
+	}
+	if bf.BorderThickness == 14 {
+		return 4.0, nil
+	}
+	if bf.BorderThickness == 15 {
+		return 5.0, nil
+	}
+	return 0, fmt.Errorf("GetBorderThickness err")
+}
+
+func (bf *BorderFill) GetDiagonalLineType() (string, error) {
+	if bf.DiagonalLineType == 0 {
+		return "Slash", nil
+	}
+	if bf.DiagonalLineType == 0 {
+		return "BackSlash", nil
+	}
+	if bf.DiagonalLineType == 0 {
+		return "CrookedSlash", nil
+	}
+	return "", fmt.Errorf("GetDiagonalLineType err")
+}
+
+func (bf *BorderFill) GetFillInfo() {
+	//var fillType uint
+	if bf.FillInfo[0] == 0 {
+	}
+}
+
+func getSolidFillInfo() {
+
+}
+
+func getGradFillInfo() {
+}
+
+func getImageFillInfo() {
 }
