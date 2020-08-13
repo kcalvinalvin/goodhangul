@@ -1,25 +1,23 @@
 # goodhangul
 
-All things Hangul made good (in my opinion).
+All things Hangul made good
 
-## Hwp file converter
+## Hwp file parser
 
-Hwp file converter converts your bad .hwp (subjective) to good .odt format
-(subjective).
+Parse those annoying hwp files
 
-# Structure 구조
+# Structure
 
 There's 5 big sections for how Hancom structures their file format.
-한컴에서는 5가지 구조로 hwp 파일 형식을 정리합니다.
 
 ## HWP 3.0
 
 ## HWP 5.0
 
-## Distribution Format 배포용 문서
+## Distribution Format
 
-## Equation Format 수식 구조
+## Equation Format
 
-## Chart Format 차트 구조
+## Chart Format
 
 본 제품은 한글과컴퓨터의 글 문서 파일(.hwp) 공개 문서를 참고하여 개발하였습니다
